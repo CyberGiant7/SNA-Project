@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+
+%------------------------------ tables
+\usepackage{tabularx}
+\usepackage{makecell}
+
+%------------------------------ images
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+% footnotes
+\setlength{\footnotesep}{0.6\baselineskip}
+
+% Page layout
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=2cm]{geometry}
+\setlength{\skip\footins}{2cm}
+
+% Clickable toc and links styles
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage{url}
+
+% Title spec
+\usepackage{titlesec}
+\titlespacing\section{0pt}{20pt}{10pt}
+\titlespacing\subsection{0pt}{15pt}{10pt}
+\titlespacing\subsubsection{0pt}{10pt}{5pt}
+
+% Page numbering and head
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+    { \textit{University of Bologna} }\\
+    \vspace{5mm}
+    { \textit{Social Network Analysis} }\\
+\end{center}
+
+\vspace{20mm}
+
+\begin{center}
+    {\LARGE{\bf Open Flights}}\\
+\end{center}
+
+\vspace{20mm}
+
+\begin{center}
+    {\LARGE{Analysis of Airplane Routes based on Airports Data}}\\
+\end{center}
+
+\vspace{30mm}
+
+\begin{center}
+    {\large{Brajucha Filippo 0001130613\\}}
+    \vspace{5mm}
+    {\large{Leonardo Dessì \\}}
+    \vspace{5mm}
+    {\large{Gianmarco Gabrielli  \\}}
+    \vspace{5mm}
+    {\large{Simone Rinaldi \\}}
+\end{center}
+
+\vspace{40mm}
+
+\end{titlepage}
+
+\section{Introduction}
+The idea is to develop the analysis of the global network of airports and the air routes connecting them. \\
+We founded a data source on the OpenFlights website (\hyperlink{https://openflights.org/}{link} and \hyperlink{https://github.com/jpatokal/openflights}{github-link}), which allow us to construct a graph representing this network. In the graph, the nodes represent the airports, while the edges represent the direct air routes between two different airports.\\ 
+We weight the edges according to the number of flights or connections that exist between the various airports.\\
+The main objective of the project is to identify the most relevant and strategic airports on a network level. We identified the airports that serve as major transit nodes and subsequently test the hypothesis that these airports are critical for the overall connectivity of the network.
+
+
+
+\section{Dataset}
+
+\subsection{Dataset Description: OpenFlights Air Route Network}
+The dataset used for this project is derived from OpenFlights, a public resource for airline, airport, and route data. Specifically, the dataset is an \textbf{edgelist} format file that describes the global air transportation network. This dataset is particularly valuable for studying the structure and dynamics of global air travel.
+
+\subsubsection{Source}
+\begin{itemize}
+    \item \textbf{URL}: \href{http://opsahl.co.uk/tnet/datasets/openflights.txt}{OpenFlights Dataset}
+    \item \textbf{Provider}: The dataset is hosted on Tore Opsahl’s website, a notable source for network analysis datasets.
+\end{itemize}
+
+\subsubsection{Format and Structure}
+The dataset is formatted as an edgelist, where each row represents a direct connection (route) between two airports. An edgelist is a common representation of a graph in network analysis, detailing the edges (connections) between nodes (airports). Each line contains the following key information:
+\begin{enumerate}
+    \item \textbf{Source Node (Airport)}: A numerical ID representing the airport where the route originates.
+    \item \textbf{Destination Node (Airport)}: A numerical ID representing the airport where the route ends.
+    \item \textbf{Weight (Number)}: An additional column representing the weight of the edge, often indicating frequency or capacity.
+\end{enumerate}
+Each node number is linked to a list (openflights\_airports.txt) where is possible to find all the info about the airport (for example the country, the city, the code, the coordinates etc).
+
+\subsection{Key Characteristics}
+\begin{itemize}
+    \item \textbf{Nodes}: Airports, each uniquely identified by an ID.
+    \item \textbf{Edges}: Direct flight routes connecting pairs of airports.
+    \item \textbf{Network Type}:
+    \begin{itemize}
+        \item \textit{Directed}: Routes are directional, from source airport to destination airport.
+        \item \textit{Weighted}: Depending on the data, edges might include weights for analyzing traffic intensity or other attributes.
+    \end{itemize}
+\end{itemize}
+
+
+
+\section{Applications}
+
+This dataset is ideal for exploring various network science topics, including:
+\begin{itemize}
+    \item \textbf{Degree Centrality}: Identifying major hubs in the air transportation network.
+    \item \textbf{Clustering}: Finding regional clusters of airports.
+    \item \textbf{Shortest Path Analysis}: Examining the efficiency of global air connectivity.
+    \item \textbf{Community Detection}: Identifying clusters of airports with dense internal connections.
+\end{itemize}
+
+
+
+\section{Limitations and Considerations}
+
+\begin{itemize}
+    \item \textbf{Static Data}: The dataset represents a snapshot in time and does not capture temporal variations in routes.
+    \item \textbf{Coverage}: The dataset may not include all airlines or routes, as coverage depends on OpenFlights’ data collection.
+    \item \textbf{Data Cleaning}: It may require preprocessing to handle missing data, self-loops, or duplicate edges.
+\end{itemize}
+
+
+
+\section{Relevance to the Project}
+
+The OpenFlights edgelist provides a comprehensive representation of global airline routes, making it a powerful tool for analyzing the structure of air transportation networks. By leveraging this dataset, the project aims to explore metrics such as centrality, connectivity, and clustering within the global airport network, contributing to the broader understanding of network dynamics in transportation.
+
+
+
+\section{Validity and Reliability}
+
+\end{document}
