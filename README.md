@@ -2,6 +2,6 @@
 
 Students:
 - [Leonardo Dessì](https://github.com/CyberGiant7)
-- [Simone Rinaldi]()
+- [Simone Rinaldi](https://github.com/simorina)
 - [Filippo Brajucha]()
 - [Gianmarco Gabrielli]()
