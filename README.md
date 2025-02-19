@@ -8,8 +8,8 @@ This project analyzes the global air transport network using various network ana
 
 - [Leonardo Dessì](https://github.com/CyberGiant7)
 - [Simone Rinaldi](https://github.com/simorina)
-- [Filippo Brajucha]()
-- [Gianmarco Gabrielli]()
+- [Filippo Brajucha](https://github.com/benzebra)
+- [Gianmarco Gabrielli](https://github.com/Callaghan131)
 
 ## Project Structure
 
