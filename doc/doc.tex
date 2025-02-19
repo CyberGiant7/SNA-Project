@@ -3,7 +3,7 @@
 %------------------------------ tables
 \usepackage{tabularx}
 \usepackage{makecell}
-\usepackage{amsmath}
+\usepackage{amsmath} 
 \usepackage{float}
 %------------------------------ images
 \usepackage{graphicx}
@@ -110,9 +110,9 @@
     The main contributions of the project include:
 
     \begin{itemize}
-        \item Identification of the most globally relevant airports: Using various measures of centrality such as \textit{degree centrality}, \textit{eigenvector centrality}, \textit{pagerank}, etc., the project aims to identify airports that play a key role in the global air transport network.
+        \item Identification of the most globally relevant airports: Using various measures of centrality such as \textit{Degree Centrality}, \textit{Eigenvector Centrality}, \textit{PageRank}, etc., the project aims to identify airports that play a key role in the global air transport network.
         \item Verification of the hypothesis that airports with high betweenness centrality are critical to global connectivity: Through robustness simulations, the project will evaluate the impact of removing these airports on network connectivity. Connectivity, fragmentation, and compactness will be used to measure the impact.
-        \item The identification of regional airport clusters: Using clustering algorithms such as the community louvain algorithm, the project will identify groups of strongly interconnected airports within specific geographic areas.
+        \item The identification of regional airport clusters: Using clustering algorithms such as the community \textit{louvain algorithm}, the project will identify groups of strongly interconnected airports within specific geographic areas.
     \end{itemize}
 
 
@@ -128,19 +128,19 @@
     \end{itemize}
     Data manipulation and analysis tools were used to analyze and construct the airport network graph. These tools included the Python programming language, which offers libraries specifically designed for network analysis, such as NetworkX.
 
-    The network graph used airports as nodes and direct air routes as arcs. The arcs were weighted according to the number of existing flights or connections between airports to reflect the intensity of air traffic.
+    The network graph used airports as nodes and direct air routes as edges. The edges were weighted according to the number of existing flights or connections between airports to reflect the intensity of air traffic.
 
     \subsubsection{Format and Structure}
     The process of converting the OpenFlights database into a networkX graph for network analysis is as follows:
     \begin{itemize}
         \item \textbf{Data import}: Airport and route data were imported into Python using Pandas library, which allows tabular data to be handled efficiently.
         \item \textbf{Node creation}: Each airport in the database was converted into a graph node. Relevant information about the airport, such as name, city and country, was associated as attributes to the corresponding node.
-        \item \textbf{Creation of arcs}: For each air route in the database, an arc was created between the nodes corresponding to the departure and arrival airports. The presence of an arc thus indicates the existence of a direct air link between two airports.
-        \item \textbf{Arch weighting}: To reflect the intensity of air traffic between airports, the arcs were weighted according to the number of flights or connections present between the two connected airports. This information was extracted from the route database and assigned as an attribute to the corresponding arc.
-        \item \textbf{Distance calculation}: using the coordinates in the airport database, distances in km between each airport were calculated and added as an attribute of the arcs.
-        \item \textbf{Symmetrization}: in order to create an undirected graph, a summation of the weights of the arcs passing through the same nodes was performed.
+        \item \textbf{Creation of edges}: For each air route in the database, an edge was created between the nodes corresponding to the departure and arrival airports. The presence of an edge thus indicates the existence of a direct air link between two airports.
+        \item \textbf{Edge weighting}: To reflect the intensity of air traffic between airports, the arcs were weighted according to the number of flights or connections present between the two connected airports. This information was extracted from the route database and assigned as an attribute to the corresponding edge.
+        \item \textbf{Distance calculation}: using the coordinates in the airport database, distances in km between each airport were calculated and added as an attribute of the edges.
+        \item \textbf{Symmetrization}: in order to create an undirected graph, a summation of the weights of the edges passing through the same nodes was performed.
     \end{itemize}
-    The result of this process is a weighted, undirected graph, where the nodes represent the airports and the arcs represent the direct air routes between them. The weight of each arc indicates the intensity of air traffic between the connected airports.
+    The result of this process is a weighted, undirected graph, where the nodes represent the airports and the edges represent the direct air routes between them. The weight of each edge indicates the intensity of air traffic between the connected airports.
 
     The structure of the graph is shown in figure~\ref{fig:graph-structure}.
     In this figure are shown only the nodes with degree greater or equal than 10, and the dimension of the node represents the betweenness centrality of the node.
@@ -162,7 +162,7 @@
 
 
     \section{Validity and Reliability}\label{sec:validity-and-reliability}
-    Our analysis is built on the reputable OpenFlights dataset and standard network metrics, ensuring both validity and reliability.
+    Our analysis is built on the reputable \texttt{OpenFlights} dataset and standard network metrics, ensuring both validity and reliability.
 
     To maintain validity, we:
     \begin{itemize}
@@ -188,6 +188,7 @@
 
 
     \section{Measures and Results}\label{sec:measures-and-results}
+    For the metrics graph we use the \texttt{IATA/FAA} value id, in order to distinguish every airport. It's important to say that there could be more than 1 airport in the same city.
 
     \subsection{Measures}\label{subsec:measures}
     This dataset is ideal for exploring various network science topics, including:
@@ -204,11 +205,23 @@
     \subsection{Results}\label{subsec:results}
 
     \subsubsection{Degree Centrality}
-    This chart shows the top 10 airports ranked by their degree centrality, which measures the number of direct connections an airport has with others. Cities such as \textbf{Atlanta}, \textbf{Chicago}, and \textbf{Denver} top the rankings by the number of direct connections.
-    Their high-degree values indicate that these urban centers serve as major direct connectivity hubs.
+    This chart shows the top 10 airports ranked by their degree centrality, which measures the number of direct connections an airport has with others. We can see as cities such as \textbf{Atlanta} (ATL) and \textbf{Chicago} (ORD) has a degree centrality value much higher than others (almost higher than \textit{0.09}), starting from \textbf{Denver} (DEN) the value descent, it remains on \textit{0.07} for all the top 13 airports and then it falls under \textit{0.06}.\\
+    Their high-degree values indicate that these urban centers serve as major direct connectivity hubs.\\
+    We can make some observation linked to the macro-areas represented by the continents.\\
+    It's curious to see that the top 3 (also top 4) is totally composed by US cities, so we can assume the centrality of this state in direct airplane connection across the World, there are other US cites in the top 10.\\
+    Looking at european cities we can see that in the top 10 there is \textbf{Vienna} (VIE), \textbf{London} (LHR), \textbf{Paris} (CDG) and \textbf{Amsterdam} (AMS).\\
+    It's also curious to see that there is just 1 asian city in the top 10 rank, \textbf{Beijing} (PEK). We can imagine that there could be some problems linked to a "bottleneck effect" with just 1 city with high degree centrality.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/degree_centrality.png}
+    \end{figure}
 
     \subsubsection{Betweenness Centrality}
-    This bar chart shows the top 10 airports with the highest betweenness centrality. Cities like \textbf{Dallas-Fort Worth} and \textbf{Beijing} rank highest in betweenness centrality. This suggests that they play a key role as intermediaries, facilitating indirect connections across the network.
+    This bar chart shows the top 10 airports with the highest betweenness centrality. \\
+    Cities like \textbf{Dallas} (DFW) and \textbf{Beijing} (PEK) rank highest in betweenness centrality. This suggests that they play a key role as intermediaries, facilitating indirect connections across the network.\\
+    We can find a lot of cities that appears in between centrality top 10 and also in degree centrality, this suggests that these nodes are the main controller of the airplane flow. These cities are very strong bridges that allow the connection across the World.\\
+    The first 5 cities (Dallas, Beijing, Amsterdam, Los Angeles LAX and Singapore SIN) have little higher value than others, so we can assume that are more important. It's fascinating how there are 2 asian cities that have not so high degree centrality but high betweenness centrality.
 
     \begin{figure}[H]
         \centering
@@ -216,15 +229,22 @@
     \end{figure}
 
     \subsubsection{Closeness Centrality}
-    This chart ranks the top 10 airports according to closeness centrality, a measure of how well-connected an airport is within the network.
+    This chart ranks the top 10 airports according to closeness centrality, a measure of how well-connected an airport is within the network. High closeness means a node can quickly reach all other nodes, making it efficient for information spread.\\
+    It's not really self-explanatory because the value is stable for a lot of airport around \texttt{0.00012}, but we can assume that the network is well-connected.\\
+    We also plot the result with more than 20 airports.
 
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.8\linewidth]{img/closeness_centrality}
     \end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/more_closeness_centrality}
+    \end{figure}
 
     \subsubsection{Clustering Coefficient}
-    This bar chart shows the top 10 airports by clustering coefficient, suggesting they maintain tightly-knit local neighborhoods where many neighboring cities are also directly connected. Chiang Mai International Airport leads with a coefficient of ~0.18, followed by Austin and Fort Smith at ~0.17 and ~0.15 respectively. The values decrease gradually to ~0.11 for Bujumbura International Airport. These airports serve as local hubs where connected airports also tend to connect with each other.
+    This bar chart shows the top 20 airports by clustering coefficient, suggesting they maintain tightly-knit local neighborhoods where many neighboring cities are also directly connected. Chiang Mai International Airport (CNX) leads with a coefficient of \texttt{0.18}, followed by Austin (GRB) with \texttt{0.17} and Fort Smith (FSM) and James City (EWN) with around \texttt{0.15}. The values decrease gradually to \texttt{0.125} for Jacksonville Airport (OAJ). These airports serve as local hubs where connected airports also tend to connect with each other.\\
+    It's interesting to see that there are littler american airports than the bigger ones, it means that the USA has a well-connected structure of internal flights in order to move across different states.
 
     \begin{figure}[H]
         \centering
@@ -232,15 +252,21 @@
     \end{figure}
 
     \subsubsection{K-cores}
-    K-Cores are used to identify the most tightly connected parts of a graph and can provide insights into the overall structure and behavior of a network. Here we can see that the 10 airports with the highest core number is equal to 16.
+    K-Cores are used to identify the most tightly connected parts of a graph and can provide insights into the overall structure and behavior of a network. Here we can see that the 20 airports with the highest core number is equal to 16.\\
+    Because of the nature of the metrics we decided to see the others airport that has k-cores equal to 16 so we plotted other results. As we can see they are more than 50. So the network analyzed has a robust core group made by at least 50 airports across the world.
 
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.8\linewidth]{img/core_number}
     \end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/more_core_number}
+    \end{figure}
 
     \subsubsection{Eigenvector Centrality}
-    The rankings again favor influential hubs such as \textbf{Atlanta} and \textbf{Chicago}. Their high scores reflect not only a large number of connections but also links to other highly connected cities. An airport with many connections to small, isolated airports would have a lower eigenvector centrality than one with fewer connections to major hubs.
+    The rankings again favor influential hubs such as \textbf{Atlanta} (ATL) and \textbf{Chicago} (ORD). Their high scores reflect not only many connections but also links to other highly connected cities. An airport with many connections to small, isolated airports would have a lower eigenvector centrality than one with fewer connections to major hubs.\\
+    We can see that the first 2 position are occupied by the same airport that has also high Degree Centrality, so we can assume that they are crucial for the network and they could represent a \textit{bottleneck} in the network.\\    
 
     \begin{figure}[H]
         \centering
@@ -248,7 +274,9 @@
     \end{figure}
 
     \subsubsection{Pagerank}
-    Results mirror those of eigenvector centrality, with cities like \textbf{Atlanta}, \textbf{Chicago}, and \textbf{Los Angeles} emerging as pivotal nodes. This metric emphasizes the importance of quality as well as quantity in their connections.
+    Results mirror those of eigenvector centrality, with cities like \textbf{Atlanta} (ATL), \textbf{Chicago} (ORD), and \textbf{Los Angeles} (LAX) emerging as pivotal nodes. This metric emphasizes the importance of quality as well as quantity in their connections.\\
+    This metric is also very similar to the Eignvector ones because of it's nature, but it evidence better the importance of ATL airport.
+    
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.8\linewidth]{img/pagerank}
@@ -269,28 +297,28 @@
     \end{figure}
 
     \subsubsection{Density}
-    The computed density of 0.0045658 indicates that only about 0.46\% of all possible connections between airports are present in the network. This very low density is expected in an air transport network, where airports are not universally connected but rather linked through a few strategic routes and major hubs. The sparsity highlights that the network relies on selective connectivity to maintain efficiency and manage logistical constraints, rather than having a fully connected structure.
+    The computed density of \texttt{4.57e-3} indicates that only about \texttt{0.46\%} of all possible connections between airports are present in the network. This very low density is expected in an air transport network, where airports are not universally connected but rather linked through a few strategic routes and major hubs. The sparsity highlights that the network relies on selective connectivity to maintain efficiency and manage logistical constraints, rather than having a fully connected structure.
 
     \subsection{Additional Metrics Description}\label{subsec:additional-metrics-description}
 
     \begin{itemize}
-        \item \textbf{Average Path Length:} 10210.055112776308
+        \item \textbf{Average Path Length:} \texttt{10210.055112776308}
 
         This very high value likely reflects a weighted average, where the weights (distances in kilometers) are aggregated along paths. It indicates that, when considering these weights, the typical ``distance'' between airports is large. In contrast, the unweighted (hop-based) distances are much shorter.
 
-        \item \textbf{Diameter of the Network:} 12
+        \item \textbf{Diameter of the Network:} \texttt{12}
 
         The diameter represents the maximum number of hops between any two airports. A diameter of 12 shows that, topologically, any airport can be reached from any other in no more than 12 steps, indicating a compact structure in terms of connectivity.
 
-        \item \textbf{Number of Connected Components:} 1
+        \item \textbf{Number of Connected Components:} \texttt{1}
 
         This result confirms that the network is fully connected; every airport is reachable from any other, ensuring a unified air transport system.
 
-        \item \textbf{Assortativity:} -0.17902211456273712
+        \item \textbf{Assortativity:} \texttt{-0.17902211456273712}
 
         The negative assortativity indicates a tendency for high-degree nodes (major hubs) to connect with low-degree nodes (smaller or regional airports). This disassortative mixing is typical in transportation networks, where central hubs connect to many less-connected nodes.
 
-        \item \textbf{Number of Bridges:} 559
+        \item \textbf{Number of Bridges:} \texttt{559}
 
         Bridges are edges whose removal would disconnect parts of the network. The presence of 559 bridges suggests that there are several critical routes whose loss could fragment the network, highlighting areas of potential vulnerability.
     \end{itemize}
@@ -307,16 +335,16 @@
     \end{figure}
 
     \subsection{Robustness}\label{subsec:robustness}
-    The ability of the network to maintain a connection between all (or most) pairs of nodes when challenged. First, our team computed the first 10 hubs with the highest degree value. After that, we have removed them from the network to check connectivity. The result was that we lost connectivity after the elimination of the hubs. Follow the fragmentation computation that resulted very low, so, the network is not fragmented. The third step is the computation of compactness. Initially, it was around 0.25, but after removing the hubs, the network was not compact anymore.
+    The ability of the network to maintain a connection between all (or most) pairs of nodes when challenged. First, our team computed the first 10 hubs with the highest degree value. After that, we removed them from the network to check connectivity. The result was that we lost connectivity after the elimination of the hubs. Follow the fragmentation computation that resulted very low, so, the network is not fragmented. The third step is the computation of compactness. Initially, it was around \texttt{0.25}, but after removing the hubs, the network was not compact anymore.
 
     \subsubsection{Fragmentation Computation}
-    Graph fragmentation involves breaking down a graph into smaller, more manageable subgraphs. We first computed the fragmentation before removing the hubs, with a value equal to 0. Then we tried to remove the hubs, and we got a graph with fragmentation value of 0.05.
+    Graph fragmentation involves breaking down a graph into smaller, more manageable subgraphs. We first computed the fragmentation before removing the hubs, with a value equal to 0. Then we tried to remove the hubs, and we got a graph with fragmentation value of \texttt{0.05}.
 
     \subsubsection{Compactness Computation}
-    Graph compactness tells how ``tightly'' a graph is connected. The value for the original graph is 0.25. After removing the top 10 hubs, the graph is no longer compact.
+    Graph compactness tells how "tightly" a graph is connected. The value for the original graph is \texttt{0.25}. After removing the top 10 hubs, the graph is no longer compact.
 
     \subsubsection{Centrality Analysis}
-    At the end, we proceeded with the computation of the betweenness centrality. Then we visualized the most influenced airports about the new computation of the metric.
+    At the end, we proceeded with the computation of the Betweenness Centrality. Then we visualized the most influenced airports about the new computation of the metric.
 
     \begin{figure}[H]
         \centering
