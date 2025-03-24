@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-
+\usepackage[utf8]{inputenc}
 %------------------------------ tables
 \usepackage{tabularx}
 \usepackage{makecell}
@@ -278,6 +278,12 @@
         \includegraphics[width=0.8\linewidth]{img/more_closeness_centrality}
     \end{figure}
 
+    It is important to clarify that in the context of airports, “closeness centrality” does not refer primarily to the dissemination of digital information, but rather to the ease of physical movement of passengers, cargo and aircraft. Although there are instant communication methods for information, physical transportation remains essential for people and cargo.
+
+    “Closeness centrality” captures the efficiency of the air transportation network in minimizing physical distances and travel time. An airport with high “closeness centrality” is beneficial not because it disseminates information faster, but because it facilitates more efficient movement through the physical network. In other words, it minimizes the effort required to “travel” through the network, where “travel” refers to the movement of passengers and cargo.
+    
+    In summary, “closeness centrality” in the airport context is a measure of the efficiency with which airports are interconnected, facilitating faster and more accessible transportation, and is not directly related to digital information dissemination.
+
     \subsubsection{Clustering Coefficient}
     This bar chart shows the top 20 airports by clustering coefficient, suggesting they maintain tightly-knit local neighborhoods where many neighboring cities are also directly connected. Chiang Mai International Airport (CNX) leads with a coefficient of \texttt{0.18}, followed by Austin (GRB) with \texttt{0.17} and Fort Smith (FSM) and James City (EWN) with around \texttt{0.15}. The values decrease gradually to \texttt{0.125} for Jacksonville Airport (OAJ). These airports serve as local hubs where connected airports also tend to connect with each other.\\
     It's interesting to see that there are littler american airports than the bigger ones, it means that the USA has a well-connected structure of internal flights in order to move across different states.
@@ -299,6 +305,70 @@
         \centering
         \includegraphics[width=0.8\linewidth]{img/more_core_number}
     \end{figure}
+
+    \textbf{Definition and calculation of small-worldness}\
+        Small-worldness $\sigma$ is a quantitative measure that determines how much a network behaves as a "small-world network," comparing its properties with those of an equivalent random graph. In our code, it is calculated using the NetworkX function \texttt{nx.algorithms.smallworld.sigma()}:
+        \begin{verbatim}
+        small_worldness = nx.algorithms.smallworld.sigma(OF_graph, niter=1, nrand=2)
+        \end{verbatim}
+        This function calculates the parameter $\sigma$ according to the formula:
+        \begin{equation}
+            \sigma = \frac{C/C_{\text{rand}}}{L/L_{\text{rand}}}
+        \end{equation}
+        Where:
+        \begin{itemize}
+        \item C is the average clustering coefficient of the real network
+        \item C{rand} is the average clustering coefficient of an equivalent random network
+        \item L is the average shortest path length of the real network
+        \item L{rand} is the average shortest path length of an equivalent random network
+        \end{itemize}
+        \textbf{Interpretation in the context of air transport networks}
+        In the context of the OpenFlights air transport network, a small-worldness value $\sigma$ > 1 indicates that:
+        \begin{itemize}
+        \item \textbf{High local clustering}: Airports tend to form densely connected regional communities (e.g., national hubs with numerous internal connections)
+        \item \textbf{Short global paths}: Despite the presence of these regional clusters, it is possible to reach any airport in the network with a relatively low number of flights (typically 3-4 stopovers)
+        \end{itemize}
+        An air transport network with small-world properties thus shows the coexistence of two seemingly contradictory phenomena: strong local grouping and short global distances.\
+        \textbf{Relevance for transport network analysis}\
+        The analysis of small-worldness in air transport networks is particularly relevant for:
+        \begin{itemize}
+        \item \textbf{Network resilience}: Small-world networks are generally robust against random failures (random airport closures), but vulnerable to targeted attacks on main hubs
+        \item \textbf{Operational efficiency}: Small-world networks facilitate rapid transfers of passengers and goods, minimizing the number of necessary stopovers
+        \item \textbf{Propagation of phenomena}: Modeling how delays, cancellations, or even epidemics can rapidly propagate through the network
+        \item \textbf{Network development}: Understanding how the strategic addition of new routes can improve global connectivity
+        \end{itemize}
+        \textbf{Output in the analyzed code}\
+        In our code, the function \texttt{sigma()} produces a numerical value that is then interpreted:
+        \begin{verbatim}
+        print(f'small worldness: {small_worldness}')
+        if small_worldness > 1:
+        print("The network is a small-world network.")
+        else:
+        print("The network is not a small-world network.")
+        \end{verbatim}
+        The parameters \texttt{niter=1} and \texttt{nrand=2} in the function call indicate:
+        \begin{itemize}
+        \item \texttt{niter}: Number of iterations for the calculation (ideally should be increased for more robust results)
+        \item \texttt{nrand}: Number of random networks generated for comparison (this should also be increased in a rigorous analysis)
+        \end{itemize}
+        \textbf{Limitations and methodological considerations}\
+        It is also important to highlight some limitations of the approach:
+        \begin{itemize}
+        \item The low values of \texttt{niter} and \texttt{nrand} in the code may produce unreliable estimates of $\sigma$. For a rigorous analysis, higher values (e.g., niter=10, nrand=10) would be advisable.
+        \item The small-world property is influenced by the size of the network and its density. It is useful to compare the value of $\sigma$ with other transport networks of similar size.
+        \item The symmetrization of the network (transforming directional links into non-directional ones) might affect the interpretation, as in reality not all air routes are bidirectional.
+        \item The calculation only considers the topology of the network and does not take into account factors such as flight capacity, frequency, or seasonality of routes.
+        \end{itemize}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/core_number}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/more_core_number}
+    \end{figure}
+    
 
     \subsubsection{Eigenvector Centrality}
     The rankings again favor influential hubs such as \textbf{Atlanta} (ATL) and \textbf{Chicago} (ORD). Their high scores reflect not only many connections but also links to other highly connected cities. An airport with many connections to small, isolated airports would have a lower eigenvector centrality than one with fewer connections to major hubs.\\
@@ -334,6 +404,55 @@
 
     \subsubsection{Density}
     The computed density of \texttt{4.57e-3} indicates that only about \texttt{0.46\%} of all possible connections between airports are present in the network. This very low density is expected in an air transport network, where airports are not universally connected but rather linked through a few strategic routes and major hubs. The sparsity highlights that the network relies on selective connectivity to maintain efficiency and manage logistical constraints, rather than having a fully connected structure.
+
+    \subsection{Analysis of Distribution Queues}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/distribution_queues.png}
+        \caption{Queue distribution}
+    \end{figure}
+    Analysis of linear distributions with a focus on queues (Figure 5) allows us to examine in more detail the behavior of airports above the 95th percentile, i.e., those that are exceptionally central according to the different metrics.
+    For Degree and Degree Centrality, the dashed red line (95th percentile) is around 25-30, highlighting that only 5 percent of airports have a significant number of direct connections. Zooms on the tails show a decreasing but consistent distribution down to values of 150-175, confirming the existence of highly connected global hubs such as those identified in section 5.2.1.
+    Betweenness Centrality shows a more distributed tail than Degree, consistent with the observation in Section 5.2.2 that airports such as Dallas, Beijing, Amsterdam, Los Angeles, and Singapore have significantly higher values than others, functioning as crucial bridges in the global network.
+    Eigenvector Centrality has a relatively short and steep tail, indicating an even greater concentration of influence in the major hubs identified in Section 5.2.6.
+    Closeness Centrality shows a more uniform distribution in the tail, confirming what was reported in Section 5.2.3 about the stability of values for many airports. This suggests relatively uniform accessibility in the network of major global hubs.
+    The Clustering Coefficient shows a significant tail with values as high as 0.18, consistent with the results in Section 5.2.4, where it is noted that smaller regional airports tend to have higher clustering coefficients than large international hubs.
+
+    \subsection{Relationships between Degree Centrality Measures}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/relationships_between_degree_centrality_measures.png}
+        \caption{Relationships between Degree Centrality Measures}
+    \end{figure}
+    Analysis of the relationships between Degree Centrality and other measures (Figure 6) reveals significant patterns in the structure of the global air network.
+    The relationship between Degree Centrality and Betweenness shows a positive correlation but with significant dispersion. This confirms what was observed in Sections 5.2.1 and 5.2.2, where some Asian airports such as Beijing (PEK) and Singapore (SIN) have high betweenness despite not being in the top ranks for degree, highlighting their key role as intercontinental bridges.
+    The correlation between Degree Centrality and Eigenvector is stronger, confirming the observation in section 5.2.6 that airports with higher degree also tend to be connected to other major hubs, reinforcing their crucial role in the network.
+    The relationship between Degree Centrality and Closeness shows a weak but positive correlation, consistent with the relative homogeneity of closeness values found in section 5.2.3.
+    The relationship between Degree Centrality and Clustering Coefficient is more complex and tends to be negative for high degree nodes, confirming what was observed in section 5.2.4, where smaller and regional airports tend to have higher clustering than large international hubs.
+    
+    \subsection{Correlations among Measures of Centrality.}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/correlations_measures_centrality.png}
+        \caption{Correlations among Measures of Centrality.}
+    \end{figure}
+    The correlation matrix (Figure 7) quantifies the relationships between the different measures, providing a concise view of their interdependence.
+    The strong correlation between Degree/Degree Centrality and PageRank (0.93) highlights how the number of direct connections is a determinant of an airport's overall importance in the network.
+    The significant correlation between Degree/Degree Centrality and Betweenness (0.8) confirms what was discussed in Sections 5.2.1 and 5.2.2, where many of the airports with high Degree/Degree Centrality also appear among those with high betweenness, serving as both direct hubs and strategic bridges.
+    The correlation between Degree/Degree Centrality and Eigenvector (0.77) supports what was observed in section 5.2.6, confirming that the most connected airports tend to be connected to other major airports.
+    The moderate or weak correlations of Closeness Centrality with other measures reflect the homogeneity observed in section 5.2.3, indicating that this measure captures unique structural aspects of the network.
+    The weak or slightly negative correlations of the Clustering Coefficient with other measures, particularly with Betweenness (-0.12), confirm what was discussed in section 5.2.4, where airports with high clustering tend to be regional nodes rather than global hubs.
+
+    \subsection{Comparison of Tail Distributions}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\linewidth]{img/tail_distribution.png}
+        \caption{Correlations among Measures of Centrality.}
+    \end{figure}
+    Comparing the normalized tail distributions (Figure 8) allows us to assess the degree of inequality in the different measures of centrality for nodes above the 95th percentile.
+    Eigenvector Centrality shows the fastest decay, indicating a less unequal distribution in the extreme values, consistent with the concentration of influence in the major hubs described in Section 5.2.6.
+    Betweenness Centrality shows one of the heaviest tails, confirming what was discussed in section 5.2.2 about some airports serving as crucial bridges, with values significantly higher than others.
+    Closeness Centrality shows the slowest decay, consistent with the homogeneity of values found in section 5.2.3.
 
     \subsection{Additional Metrics Description}\label{subsec:additional-metrics-description}
 
@@ -374,7 +493,32 @@
     The ability of the network to maintain a connection between all (or most) pairs of nodes when challenged. First, our team computed the first 10 hubs with the highest degree value. After that, we removed them from the network to check connectivity. The result was that we lost connectivity after the elimination of the hubs. Follow the fragmentation computation that resulted very low, so, the network is not fragmented. The third step is the computation of compactness. Initially, it was around \texttt{0.25}, but after removing the hubs, the network was not compact anymore.
 
     \subsubsection{Fragmentation Computation}
-    Graph fragmentation involves breaking down a graph into smaller, more manageable subgraphs. We first computed the fragmentation before removing the hubs, with a value equal to 0. Then we tried to remove the hubs, and we got a graph with fragmentation value of \texttt{0.05}.
+    Graph fragmentation assesses the structural integrity of a network by measuring how disconnected its components become when certain nodes are removed. To quantify this property, we used the following formula:
+    
+    \begin{equation}
+        \text{Fragmentation} = 1 - \frac{\text{Size of largest connected component}}{\text{Total number of nodes in the graph}}
+    \end{equation}
+    
+    We first computed the fragmentation of the original OpenFlights network, which yielded a value of 0. This indicates that the initial graph was completely connected, forming a single cohesive component where any airport could be reached from any other airport through a sequence of flights.
+    
+    Subsequently, we removed the top 10 hub airports (identified by their degree centrality) from the network and recalculated the fragmentation metric. After this targeted removal, the fragmentation value increased to 0.05, indicating that the network was no longer fully connected.
+    
+    This transition from 0 to 0.05 fragmentation has significant implications:
+    
+    \begin{itemize}
+        \item \textbf{Loss of Network Cohesion:} The increase in fragmentation demonstrates that the graph is no longer compact. While 95\% of the airports still remain connected in the largest component, approximately 5\% have become isolated or form smaller disconnected clusters.
+        
+        \item \textbf{Hub Dependency:} This relatively modest intervention (removing just 10 nodes from a network containing hundreds of airports) resulted in a measurable fragmentation, highlighting the critical role these hub airports play in maintaining global connectivity.
+        
+        \item \textbf{Network Vulnerability:} The results reveal a structural vulnerability in the global air transportation network. The removal of key hubs creates isolated communities of airports that become unreachable from the main component.
+        
+        \item \textbf{Practical Consequences:} From a practical perspective, this means that certain regions or locations would become inaccessible via air travel if these major hub airports were unavailable, requiring alternative transportation methods or significant rerouting.
+    \end{itemize}
+    
+    The analysis confirms the typical scale-free network property of the air transportation system, where a small number of highly connected nodes (hubs) are essential for maintaining the network's overall connectivity. This property creates efficiency in normal operations but introduces vulnerability to targeted disruptions affecting those hubs.
+    
+    This fragmentation analysis provides valuable insights for understanding network resilience and can inform strategic planning for transportation networks, disaster response, and infrastructure investment.
+    \texttt{0.05}.
 
     \subsubsection{Compactness Computation}
     Graph compactness tells how "tightly" a graph is connected. The value for the original graph is \texttt{0.25}. After removing the top 10 hubs, the graph is no longer compact.
@@ -386,6 +530,15 @@
         \centering
         \includegraphics[width=0.8\linewidth]{img/biggest_changes_betweenness_centrality}
     \end{figure}
+    Airports like \textbf{Munich} (MUC) and \textbf{New York Kennedy} (JFK) demonstrate the largest increases in betweenness centrality, with values exceeding 0.05. This substantial jump indicates that these airports rapidly assume critical bridging roles when main hubs are removed from the network. \\
+
+    The data reveals a clear hierarchical pattern among these airports: the top tier (MUC, JFK) shows nearly twice the betweenness increase compared to the bottom tier (SEA, PVG, EWR). The middle tier consisting of \textbf{Frankfurt} (FRA), \textbf{Zurich} (ZRH), \textbf{Morristown} (MRT), and \textbf{San Francisco} (SFO) exhibits intermediate values between 0.041-0.045, positioning them as significant but not dominant secondary hubs. \\
+    
+    Notably, the geographic distribution shows a concentration of European airports (Munich, Frankfurt, Zurich) and North American facilities (JFK, SFO, IAH, SEA, EWR) among those gaining the most centrality. This suggests these regions maintain robust alternative routing capabilities when primary hubs are unavailable. \\
+    
+    These findings highlight the network's adaptive resilience: when major connection points are removed, these secondary airports rapidly increase their importance as transfer points, ensuring the network maintains functional connectivity, albeit potentially with less efficient routing. The significant increases in betweenness centrality demonstrate how the global air transportation network reconfigures its flow patterns to accommodate the loss of primary hubs. \\
+    
+    This analysis provides valuable insights for understanding network vulnerability and identifying which airports serve as critical backups in contingency scenarios. The airports showing the largest increases would be prime candidates for capacity expansion if network resilience is a priority for transportation planners.
 
 
     \section{Conclusions}\label{sec:conclusions}
