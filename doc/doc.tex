@@ -183,7 +183,7 @@
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=1\linewidth]{img/graph_map_structure}
+        \includegraphics[width=1\linewidth]{img/graph_map_structure.png}
         \caption{Graph structure displayed in the world map}
         \label{fig:world-graph}
     \end{figure}
@@ -385,7 +385,7 @@
     
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.8\linewidth]{img/pagerank}
+        \includegraphics[width=0.8\linewidth]{img/pagerank2.png}
     \end{figure}
 
     \subsubsection{Metrics distribution}
@@ -481,13 +481,56 @@
     \subsubsection{Powerlaw}
     The power law fit yielded an exponent ($\alpha$) of approximately 1.8023. In a distribution of the form \( P(x) \propto x^{-\alpha} \), this value indicates a heavy-tailed behavior. Specifically, an exponent around 1.8 suggests that while many nodes (e.g., airports) have relatively few connections, a small number have extremely high connectivity. This pronounced heterogeneity implies that a few key hubs dominate the network structure, making them crucial for overall connectivity.
 
-    \subsubsection{Clustering}
-    Here is a representation of the clustering of the airports.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{img/powerlaw.png}
+    \end{figure}
+
+        \subsubsection{Clustering}
+        Here is a representation of the clustering of the airports.
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=1\linewidth]{img/community_clustering_graph}
+        \includegraphics[width=1\linewidth]{img/community_clustering_graph.png}
     \end{figure}
+
+    \subsubsection{Regional Cluster Characteristics}
+        \paragraph{European Region} 
+        
+            The European airport network demonstrates the highest cluster density, characterized by:
+            \begin{itemize}
+            \item Predominant purple-violet color mapping
+            \item Extremely high node interconnectivity
+            \item Minimal geographical dispersion
+            \item Suggests a highly integrated transnational aviation infrastructure
+            \end{itemize}
+        \paragraph{North American Region}
+        
+            The North American cluster exhibits:
+            \begin{itemize}
+            \item Intense blue coloration
+            \item Comprehensive territorial coverage
+            \item High-density interconnection across multiple hub airports
+            \item Demonstrates a robust, extensively networked aviation ecosystem
+            \end{itemize}
+        \paragraph{East Asian Region}
+        
+            The East Asian network presents:
+            \begin{itemize}
+            \item Predominantly green cluster representation
+            \item Concentrated airport distributions in China and Japan
+            \item Significant intra-regional connectivity
+            \item Indicates a geographically compact aviation network
+            \end{itemize}
+        \paragraph{Latin American Region}
+        
+            The Latin American cluster is characterized by the following:
+            \begin{itemize}
+            \item Sparse turquoise-colored nodes
+            \item Lower connectivity density compared to other regions
+            \item More dispersed geographical distribution
+            \item Suggests potential infrastructure development opportunities
+            \end{itemize}
 
     \subsection{Robustness}\label{subsec:robustness}
     The ability of the network to maintain a connection between all (or most) pairs of nodes when challenged. First, our team computed the first 10 hubs with the highest degree value. After that, we removed them from the network to check connectivity. The result was that we lost connectivity after the elimination of the hubs. Follow the fragmentation computation that resulted very low, so, the network is not fragmented. The third step is the computation of compactness. Initially, it was around \texttt{0.25}, but after removing the hubs, the network was not compact anymore.
@@ -540,6 +583,20 @@
     
     This analysis provides valuable insights for understanding network vulnerability and identifying which airports serve as critical backups in contingency scenarios. The airports showing the largest increases would be prime candidates for capacity expansion if network resilience is a priority for transportation planners.
 
+
+    \section{Critiques}\label{sec:critiques}
+        \subsubsection{Weighting of Metrics}
+            Closeness centrality is calculated using geographic distances, implicitly assuming that “closeness” in the network depends on physical proximity. However, in airport contexts, factors such as flight frequency, number of passengers or availability of direct connections might be more relevant indicators of accessibility. An alternative weighting, based on socioeconomic data, would have made the analysis more informative.
+        \subsection{Viewing Communities}
+            The identification of clusters using Louvain's algorithm reveals structural groups, but the lack of external validation (e.g., comparison with administrative or economic regions) makes it difficult to interpret the results. For example, it is unclear whether clusters correspond to aviation alliances (e.g., Star Alliance) or geopolitical dynamics.
+        \subsection{Robustness Simulation}
+            The removal of the top 10 hubs assesses only an extreme scenario, neglecting the impact of progressive or random attacks. In addition, the post-removal assessment focuses solely on betweenness centrality and fragmentation, ignoring metrics such as increased network diameter or reduced throughput, which are crucial for assessing operational resilience.
+        \subsection{Scalability and Performance}
+            The use of algorithms such as calculating betweenness centrality (O(nm) for sparse networks) and small-worldness (based on comparisons with random networks) becomes computationally burdensome for large networks. The absence of optimizations (e.g., approximations or sampling) limits the method's applicability to larger datasets.
+        \subsection{Future Perspectives}
+            To extend this work, it would be useful to integrate temporal data to analyze network evolution (e.g., impact of pandemics or economic crises) as well as socioeconomic data (e.g., GDP of cities) to explore relationships between connectivity and regional development. The adoption of dynamic models (e.g., time-weighted networks) and the application of machine learning techniques to predict critical failures represent promising directions. In addition, quantitative validation of clusters through modularity metrics or comparisons with external datasets would strengthen structural conclusions.
+            
+        
 
     \section{Conclusions}\label{sec:conclusions}
     The conclusions of the study on the global air transport network highlight several critical insights derived from the analysis of airport connectivity and centrality measures. The project aimed to identify the most relevant and strategic airports that play a pivotal role in facilitating global connectivity. Through the application of various centrality metrics, including betweenness centrality, closeness centrality, eigenvector centrality, and PageRank, the research successfully pinpointed key airports that serve as vital nodes within the air transportation system.
